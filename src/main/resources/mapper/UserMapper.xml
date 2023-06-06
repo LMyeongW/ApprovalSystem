@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	
+	<select id="login" resultType="com.mini.demo.vo.UserVO" >
+		select 
+			*
+		from 
+			MWT_USER
+		where 
+			USER_NUM = #{USER_NUM}
+
+	</select>
+	
+	<insert id="userRegisterPost">
+		insert into
+			MWT_USER
+		(
+			USER_NUM,
+			USER_PW,
+			USER_NAME,
+			USER_GRADE,
+			USER_DEPARTMENT,
+			USER_GENDER,
+			USER_BIRTHDAY,
+			USER_TEL,
+			USER_REGDATE,
+			USER_ADMIN
+		)
+		values
+		(
+			#{USER_NUM},
+			#{USER_PW},
+			#{USER_NAME},
+			#{USER_GRADE},
+			#{USER_DEPARTMENT},
+			#{USER_GENDER},
+			#{USER_BIRTHDAY},
+			#{USER_TEL},
+			sysdate(),
+			#{USER_ADMIN}
+		)
+	
+	</insert>
+	
+	<select id="reviewAdmin" resultType="com.mini.demo.vo.UserVO">
+		select
+			USER_NAME,
+			USER_GRADE
+		from 
+			MWT_USER
+		where
+			USER_ADMIN = 'REVIEW'
+	
+	</select>
+	
+	<select id="passwordck" resultType="com.mini.demo.vo.UserVO">
+		select
+			*
+		from 
+			MWT_USER
+		where
+			USER_NUM = #{USER_NUM}
+	
+	</select>
+	
+	<update id="passwordch" parameterType="com.mini.demo.vo.UserVO">
+		update MWT_USER set
+			USER_PW = #{USER_PW}
+		where 
+			USER_NUM = #{USER_NUM}
+
+	</update>
+	
+	<select id="userConditionListGet" parameterType="hashMap" resultType="com.mini.demo.vo.UserVO">
+		select 
+			*
+		from
+			MWT_USER
+		
+		order by USER_REGDATE desc
+		limit #{sqlPostNum}, #{postNum}
+	</select>
+	
+	<select id="userConditionCount" parameterType="hashMap" resultType="int">
+		select
+			count(*)
+		from 
+			MWT_USER
+	</select>
+	
+	<select id="userDetail" resultType="com.mini.demo.vo.UserVO">
+		select
+			*
+		from 
+			MWT_USER
+		where
+			USER_NUM = #{USER_NUM}
+	</select>
+	
+	<update id="userUpdate" parameterType="com.mini.demo.vo.UserVO">
+		update MWT_USER set
+			USER_NAME = #{USER_NAME},
+			USER_GRADE = #{USER_GRADE},
+			USER_DEPARTMENT = #{USER_DEPARTMENT},
+			USER_GENDER = #{USER_GENDER},
+			USER_BIRTHDAY = #{USER_BIRTHDAY},
+			USER_TEL = #{USER_TEL},
+			USER_ADMIN = #{USER_ADMIN}
+		where 
+			USER_NUM = #{USER_NUM}
+
+	</update>
+	
+	<select id="numck" resultType="int">
+		select
+			count(USER_NUM)
+		from 
+			MWT_USER
+		where
+			USER_NUM = #{USER_NUM}
+	</select>
+	
+
+</mapper>

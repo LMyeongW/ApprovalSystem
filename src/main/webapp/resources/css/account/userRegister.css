@@ -1,0 +1,347 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500&display=swap');
+/* font-family: 'Roboto', sans-serif; */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+/* font-family: 'Noto Sans KR', sans-serif; */
+/* 나눔바른고딕 */
+@font-face {
+    font-family: 'NanumBarunGothic';
+    font-style: normal;
+    font-weight: 400;
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff') format('woff'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf') format('truetype');
+}
+
+body{}
+
+#wrap {
+    display: flex;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    color: #222;
+}
+
+/*left*/
+.left_box {
+ 
+    background-color: #fff;
+    width: 15%; height: 100vh;
+}
+.left_box .left_header {
+    background-color: #fff;
+    padding: 10px 30px;
+}
+.left_box .left_title {
+    background-color: #1e88ce;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 50px;
+    width: 100%; height: 50px;
+}
+.nav .left_menu {
+    padding: 0 30px;
+    width: 100%; 
+}
+.nav .left_menu li {
+    cursor: pointer;
+    margin: 50px auto;
+    text-align: center;
+}
+
+
+.nav .left_menu li h3 {
+    display: flex;
+    color: #072a41;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 40px;
+    padding-left: 80px;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+}
+
+.nav .left_menu li .title .text {
+    padding-left: 80px;
+    height: 40px;
+}
+.nav .left_menu li h3 .menubtn {
+    position: relative;
+    background-color: #fff;
+    margin-top: 11px;
+    margin-left: 20px;
+    width: 20px; height: 20px;
+}
+
+.nav .left_menu li h3 .menubtn span{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #072a41;
+    transition: all 0.2s;
+    width: 80%; height: 2px;
+}
+
+.nav .left_menu li h3 .menubtn span:first-child{
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; height: 2px;
+}
+.nav .left_menu li h3 .menubtn span:nth-child(3){
+
+    top: 80%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; height: 2px;
+}
+
+.nav .left_menu li:hover .menubtn span:nth-child(1) {
+    top: 13px;
+    left: 6px;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background-color: #072a41;
+    width: 50%;
+}
+
+.nav .left_menu li:hover .menubtn span:nth-child(2) {
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.nav .left_menu li:hover .menubtn span:nth-child(3) {
+    top: 13px;
+    left: 14px;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    width: 50%;
+}
+
+.nav .left_menu li h3.on .menubtn span:nth-child(1) {
+    top: 13px;
+    left: 6px;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background-color: #072a41;
+    width: 50%;
+}
+
+.nav .left_menu li h3.on .menubtn span:nth-child(2) {
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.nav .left_menu li h3.on .menubtn span:nth-child(3) {
+    top: 13px;
+    left: 14px;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    width: 50%;
+}
+.left_box .left_menu li .d2 {
+    display: none;
+}
+.left_box .left_menu li .d2 li{
+    cursor: pointer;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 40px;
+    height: 40px;
+}
+.login_box {
+	display:flex;
+	align-items: center;
+}
+.login_box > a {
+ 	display:flex;
+	align-items: center;
+	font-size:12px;
+	margin-left:10px;
+}
+.login_box .logout_box{
+	width: 20px; height: 20px;
+}
+
+.login_box .logout_box img{
+	width: 100%;
+}
+/*right*/
+.right_box {
+    background-color: #eee;
+    width: 85%; height: 100vh;
+}
+.right_box .right_header {
+    background-color: #fff;
+    padding: 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; height: 60px;
+}
+.right_box .right_content {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+    margin-top: 40px;
+}
+.right_box .right_content .con_register {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    padding: 40px;
+    width: 100%; height: 670px;
+}
+.right_box .right_content .con_register .con_title{
+    border-bottom: 2px solid #1e88ce;
+    line-height: 50px;
+    height: 50px;
+}
+.right_box .right_content .con_box1 {
+    padding: 10px 30px;
+}
+.right_box .right_content .con_box1 .user_info_title{
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.right_box .right_content .con_box1 .user_info_box {
+    display: flex;
+}
+.right_box .right_content .con_box1 .user_info_box #user_num {
+    background-color: #f9f9f9;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    width: 200px; height: 40px;
+}
+.right_box .right_content .con_box1 .user_info_box > div {
+    cursor: pointer;
+    text-align: center;
+    color: #fff;
+    line-height: 40px;
+    border-radius: 5px;
+    width: 100px; height: 40px;
+}
+.right_box .right_content .con_box1 .user_info_box .num_btn{
+    background-color: #1e88ce;
+    margin-right: 5px;
+}
+.right_box .right_content .con_box1 .user_info_box .num_btnCk{
+    background-color: #5e5e5e;
+}
+.right_box .right_content .con_box2 {
+    display: flex;
+    padding: 10px 30px;
+}
+.right_box .right_content .con_box2 .user_info_title{
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.right_box .right_content .con_box2 .user_info_box > input{
+    background-color: #f9f9f9;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    width: 200px; height: 40px;
+}
+.right_box .right_content .con_box2 .user_info_box #user_name {
+    width: 150px; 
+}
+.right_box .right_content .con_box2 .user_info_box #user_yy {
+    width: 100px; 
+}
+.right_box .right_content .con_box2 .user_info_box #user_mm {
+    width: 70px; 
+}
+.right_box .right_content .con_box2 .user_info_box #user_dd {
+    width: 70px; 
+}
+.right_box .right_content .con_box2 .con_box3 {
+    margin-right: 10px;
+}
+#user_gender {
+    background-color: #f9f9f9;
+    padding: 0 10px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    width: 70px; height: 40px;
+}
+
+#user_grade {
+    background-color: #f9f9f9;
+    padding: 0 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    width: 70px; height: 40px;
+}
+
+#user_department {
+    background-color: #f9f9f9;
+    padding: 0 10px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    width: 100px; height: 40px;
+}
+select option {
+    background-color: #fff;
+}
+
+input[type="radio"] {
+    margin-right:5px;
+}
+
+input[type="radio"] + label {
+    margin-right: 30px;
+}
+.register_btn_box {
+    border-top: 1px solid #1e88ce;
+    margin-top: 20px;
+    width: 100%;
+    height: 60px;
+}
+.register_btn_box {
+    position: relative;
+    height: 60px;
+}
+.register_btn_box .box{
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    display: flex;
+}
+
+.register_btn_box .box > div{
+    background-color: #1773b1;
+    font-size: 15px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    margin-right: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 110px; height: 50px;
+}
+
+input:focus[type=text]  {outline: 2px solid #61bdfa;}
+select:focus {outline: 2px solid #61bdfa;}
+
+@media all and (max-width:1560px) {
+    .left_box {
+        margin: 0 auto;
+        width: 270px; height: 100vh;
+    }
+    .left_box .left_header {
+        width: 270px;
+    }
+    .right_box {
+        margin: 0 auto;
+        width: 1650px; height: 100vh;
+    }
+    .right_box .right_header {
+        width: 1650px;
+    }
+
+}

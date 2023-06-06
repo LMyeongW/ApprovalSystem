@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="registerdate">
+
+	<insert id="reviewInsert">
+		insert into MWT_REVIEWER (
+			APPROVAL_PK,
+			REVIEWER
+			
+			
+		) values(
+			#{APPROVAL_PK},
+			#{REVIEWER}
+		)
+	</insert>
+	
+	<insert id="approvalInsert">
+		insert into MWT_APPROVER (
+			APPROVAL_PK,
+			APPROVER
+			
+		) values(
+			#{APPROVAL_PK},
+			#{APPROVER}
+		)
+	</insert>
+	
+	<select id="selectReviewDate" resultType="int">
+		select
+			count(APPROVAL_PK)
+		from
+			MWT_REVIEWER
+		where
+			APPROVAL_PK = #{APPROVAL_PK}
+		
+	</select>
+	
+	<insert id="reviewOk">
+		insert into MWT_REVIEWER (
+			APPROVAL_PK,
+			REVIEWER,
+			REVIEW_DATE
+			
+		) values(
+			#{APPROVAL_PK},
+			#{REVIEWER},
+			sysdate()
+		)
+	</insert>
+	
+	<insert id="reviewNo">
+		insert into MWT_REVIEWER (
+			APPROVAL_PK,
+			REVIEWER,
+			REVIEW_REFUSAL_DATE
+			
+		) values(
+			#{APPROVAL_PK},
+			#{REVIEWER},
+			sysdate()
+		)
+	</insert>
+	
+	<update id="reviewWait" parameterType="com.mini.demo.vo.ReviewdateVO">
+		update MWT_REVIEWER set
+				REVIEWER = #{REVIEWER},
+				
+			<if test='REVIEW_STATUS == "검토 대기중"'>
+				REVIEW_REFUSAL_DATE = null,
+				REVIEW_DATE = null
+			</if>
+			<if test='REVIEW_STATUS == "반려"'>
+				REVIEW_REFUSAL_DATE = sysdate(),
+				REVIEW_DATE = null
+			</if>
+			
+			<if test='REVIEW_STATUS == "검토 완료"'>
+				REVIEW_REFUSAL_DATE = null,
+				REVIEW_DATE = sysdate()
+			</if>
+
+		where
+			APPROVAL_PK = #{APPROVAL_PK}
+
+	</update>
+	
+	
+	<insert id="approveOk">
+		insert into MWT_APPROVER (
+			APPROVAL_PK,
+			APPROVER,
+			APPROVE_DATE
+			
+		) values(
+			#{APPROVAL_PK},
+			#{APPROVER},
+			sysdate()
+		)
+	</insert>
+	
+	<insert id="approveNo">
+		insert into MWT_APPROVER (
+			APPROVAL_PK,
+			APPROVER,
+			APPROVE_REFUSAL_DATE
+			
+		) values(
+			#{APPROVAL_PK},
+			#{APPROVER},
+			sysdate()
+		)
+	</insert>
+	
+	<update id="approveWait" parameterType="com.mini.demo.vo.ApprovaldateVO">
+		update MWT_APPROVER set
+				APPROVER = #{APPROVER},
+				
+			<if test='APPROVE_STATUS == "승인 대기중"'>
+				APPROVE_REFUSAL_DATE = null,
+				APPROVE_DATE = null
+			</if>
+			<if test='APPROVE_STATUS == "반려"'>
+				APPROVE_REFUSAL_DATE = sysdate(),
+				APPROVE_DATE = null
+			</if>
+			
+			<if test='APPROVE_STATUS == "승인 완료"'>
+				APPROVE_REFUSAL_DATE = null,
+				APPROVE_DATE = sysdate()
+			</if>
+
+		where
+			APPROVAL_PK = #{APPROVAL_PK}
+
+	</update>
+
+</mapper>

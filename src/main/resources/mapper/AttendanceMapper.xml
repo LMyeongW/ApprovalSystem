@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="attendance">
+
+
+	<select id="attendanceCheck" resultType="int">
+		select
+			count(USER_NUM)
+		from 
+			MWT_ATTENDANCE
+		where
+			USER_NUM  = #{USER_NUM}
+		and 
+			ATTENDANCE_DATE = #{ATTENDANCE_DATE}
+	</select>
+	
+	<insert id="attendacePost">
+		insert into MWT_ATTENDANCE (
+			ATTENDANCE_STATUS,
+			USER_NAME,
+			USER_NUM,
+			ATTENDANCE_DATE,
+			ATTENDANCE_TIME,
+			DAY_OF_THE_WEEK	
+			
+		) values(
+			#{ATTENDANCE_STATUS},
+			#{USER_NAME},
+			#{USER_NUM},
+			#{ATTENDANCE_DATE},
+			#{ATTENDANCE_TIME},
+			#{DAY_OF_THE_WEEK}
+		)
+	</insert>
+	
+	<select id="totalcount" parameterType="hashMap" resultType="int">
+		select
+			count(*)
+		from 
+			MWT_ATTENDANCE
+		where
+			USER_NUM  = #{USER_NUM}
+	</select>
+	
+	<select id="attendanceListGet" parameterType="hashMap" resultType="com.mini.demo.vo.AttendanceListVO">
+		select 
+			A.USER_NAME, A.USER_GRADE , A.USER_DEPARTMENT, B.ATTENDANCE_STATUS, B.ATTENDANCE_DATE, B.ATTENDANCE_TIME, B.DAY_OF_THE_WEEK
+		from
+			MWT_USER as A 
+		right join MWT_ATTENDANCE as B on A.USER_NUM = B.USER_NUM 
+		where
+			A.USER_NUM = #{USER_NUM}
+			
+		order by B.ATTENDANCE_DATE desc
+		limit #{sqlPostNum}, #{postNum}
+	</select>
+	
+	<sql id="attendanceWhere" >
+		where
+			1=1 
+		<if test="searchKeyword != null and searchKeyword != ''">
+		<![CDATA[ 
+	 		AND 
+			( 
+				A.USER_NAME like concat('%',#{searchKeyword},'%')
+
+		 	)  
+	 	]]> 
+		</if>
+		
+		<if test="dapartment != null and dapartment != ''">
+		<![CDATA[ 
+	 		AND 
+			( 
+	    		A.USER_DEPARTMENT like concat('%',#{dapartment},'%')
+		 	)  
+	 	]]> 
+		</if>
+		
+		<if test="grade != null and grade != ''">
+		<![CDATA[ 
+	 		AND 
+			( 
+	    		A.USER_GRADE like concat('%',#{grade},'%')
+		 	)  
+	 	]]> 
+		</if>
+	</sql>
+	
+	<select id="allTotalcount" parameterType="hashMap" resultType="int">
+		<![CDATA[
+			select
+				count(*)
+			from 
+				MWT_USER as A 
+			right join MWT_ATTENDANCE as B on A.USER_NUM = B.USER_NUM
+		]]>	
+		<include refid="attendanceWhere"/>
+	
+	</select>
+	
+	<select id="attendanceAllListGet" parameterType="hashMap" resultType="com.mini.demo.vo.AttendanceListVO">
+		<![CDATA[
+			select 
+				A.USER_NAME, A.USER_GRADE , A.USER_DEPARTMENT, B.ATTENDANCE_STATUS, B.ATTENDANCE_DATE, B.ATTENDANCE_TIME, B.DAY_OF_THE_WEEK
+			from
+				MWT_USER as A 
+			right join MWT_ATTENDANCE as B on A.USER_NUM = B.USER_NUM 
+		]]>
+		
+		<include refid="attendanceWhere"/>
+		
+		<![CDATA[	
+			order by B.ATTENDANCE_DATE desc
+			limit #{sqlPostNum}, #{postNum}
+		]]>
+	</select>
+
+
+</mapper>

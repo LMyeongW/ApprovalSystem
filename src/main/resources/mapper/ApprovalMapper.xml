@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="approval">
+
+	<sql id="departmentWhere" >
+		where
+			1=1 
+
+
+		<if test="departmentSelect != null and departmentSelect != ''">
+		<![CDATA[ 
+	 		AND 
+			( 
+	    		USER_DEPARTMENT like concat('%',#{departmentSelect},'%')
+		 	)  
+	 	]]> 
+		</if>
+	</sql>
+	<select id="reviewlist" resultType="com.mini.demo.vo.UserVO">
+		<![CDATA[
+			select
+				USER_NAME,
+				USER_GRADE,
+				USER_NUM
+			from 
+				MWT_USER
+		]]>
+		<include refid="departmentWhere"/>
+		and
+			USER_ADMIN  IN ('REVIEW','APPROVE');
+	</select>
+	
+	<select id="approvelist" resultType="com.mini.demo.vo.UserVO">
+		<![CDATA[
+			select
+				USER_NAME,
+				USER_GRADE,
+				USER_NUM
+			from 
+				MWT_USER
+		]]>
+		<include refid="departmentWhere"/>
+		and
+			USER_ADMIN = 'APPROVE'
+	</select>
+	
+	
+	<insert id="approvalSubmit">
+		insert into MWT_APPROVAL
+		(
+			USER_NAME,
+			USER_NUM,
+			USER_GRADE,
+			USER_DEPARTMENT,
+			ASSIGNED_TASK,
+			UNDERWRITER,
+			APPROVAL_SORTS,
+			APPROVAL_STARTDATE,
+			APPROVAL_ENDDATE,
+			REVIEWER,
+			REVIEW_STATUS,
+			REVIEW_KEY,
+			APPROVER,
+			APPROVE_STATUS,
+			APPROVER_KEY,
+			REASON,
+			EMERGENCY_CONTACT,
+			APPROVE_REGDATE
+			
+		)
+		values 
+		(
+			#{USER_NAME},
+			#{USER_NUM},
+			#{USER_GRADE},
+			#{USER_DEPARTMENT},
+			#{ASSIGNED_TASK},
+			#{UNDERWRITER},
+			#{APPROVAL_SORTS},
+			#{APPROVAL_STARTDATE},
+			#{APPROVAL_ENDDATE},
+			#{REVIEWER},
+			'검토 대기중',
+			#{REVIEW_KEY},
+			#{APPROVER},
+			'승인 대기중',
+			#{APPROVER_KEY},
+			#{REASON},
+			#{EMERGENCY_CONTACT},
+			sysdate()
+		)
+		
+		<selectKey resultType="int" keyProperty="APPROVAL_PK" order="AFTER">
+  			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		
+	</insert>
+	
+	<select id="reviewWaitListGET" parameterType="hashMap" resultType="com.mini.demo.vo.ApprovalVO">
+		select
+			*
+		from 
+			MWT_APPROVAL
+		where
+			REVIEW_KEY  = #{REVIEW_KEY}
+		and 
+			REVIEW_STATUS = '검토 대기중'
+			
+		order by APPROVE_REGDATE desc	
+		limit #{sqlPostNum}, #{postNum}
+	</select>
+	
+	<select id="reviewlistCount" parameterType="hashMap" resultType="int">
+		select
+			count(*)
+		from 
+			MWT_APPROVAL
+		where
+			REVIEW_KEY  = #{REVIEW_KEY}
+		and 
+			REVIEW_STATUS = '검토 대기중'
+	</select>
+	
+	<select id="reviewCompleteListGET" parameterType="hashMap" resultType="com.mini.demo.vo.ApprovalVO">
+		select
+			*
+		from 
+			MWT_APPROVAL
+		where
+			REVIEW_KEY  = #{REVIEW_KEY}
+		and 
+			REVIEW_STATUS = '검토 완료'
+		and
+		APPROVE_STATUS = '승인 대기중'	
+		
+		order by APPROVE_REGDATE desc
+		limit #{sqlPostNum}, #{postNum}
+	</select>
+	
+	<select id="reviewCompleteListCount" parameterType="hashMap" resultType="int">
+		select
+			count(*)
+		from 
+			MWT_APPROVAL
+		where
+			REVIEW_KEY  = #{REVIEW_KEY}
+		and 
+			REVIEW_STATUS = '검토 완료'
+		and
+		APPROVE_STATUS = '승인 대기중'	
+	</select>
+	
+	<select id="approveWaitListGET" parameterType="hashMap" resultType="com.mini.demo.vo.ApprovalVO">
+		select
+			*
+		from 
+			MWT_APPROVAL
+		where
+			APPROVER_KEY  = #{APPROVER_KEY}
+		and 
+			REVIEW_STATUS = '검토 완료'
+		and
+			APPROVE_STATUS = '승인 대기중'
+		
+		order by APPROVE_REGDATE desc
+		limit #{sqlPostNum}, #{postNum}
+	</select>
+	
+	<select id="approvelistCount" parameterType="hashMap"  resultType="int">
+		select
+			count(*)
+		from 
+			MWT_APPROVAL
+		where
+			APPROVER_KEY  = #{APPROVER_KEY}
+		and 
+			REVIEW_STATUS = '검토 완료'
+		and
+			APPROVE_STATUS = '승인 대기중'
+	</select>
+	
+	<select id="approveCompleteListGET" parameterType="hashMap" resultType="com.mini.demo.vo.ApprovalVO">
+		select
+			*
+		from 
+			MWT_APPROVAL
+		where
+			APPROVER_KEY  = #{APPROVER_KEY}
+		and 
+			REVIEW_STATUS = '검토 완료'
+		and
+			APPROVE_STATUS = '승인 완료'
+		
+		order by APPROVE_REGDATE desc		
+		limit #{sqlPostNum}, #{postNum}
+	</select>
+	
+	<select id="approveCompleteListCount" parameterType="hashMap"  resultType="int">
+		select
+			count(*)
+		from 
+			MWT_APPROVAL
+		where
+			APPROVER_KEY  = #{APPROVER_KEY}
+		and 
+			REVIEW_STATUS = '검토 완료'
+		and
+			APPROVE_STATUS = '승인 완료'
+	</select>
+	
+	<select id="registerDetail" resultType="com.mini.demo.vo.ApprovalVO">
+		select
+			*
+		from 
+			MWT_APPROVAL
+		where
+			APPROVAL_PK  = #{APPROVAL_PK}
+
+	</select>
+
+	<update id="reviewStatusWrite" parameterType="com.mini.demo.vo.ApprovalVO">
+		update MWT_APPROVAL set 
+			REVIEWER = #{REVIEWER},
+			REVIEW_CONTENT = #{REVIEW_CONTENT},
+			REVIEW_STATUS = #{REVIEW_STATUS}
+		where 
+			APPROVAL_PK = #{APPROVAL_PK}
+	</update>
+	
+	<update id="approveStatusWrite" parameterType="com.mini.demo.vo.ApprovalVO">
+		update MWT_APPROVAL set 
+			APPROVER = #{APPROVER},
+			APPROVE_CONTENT = #{APPROVE_CONTENT},
+			APPROVE_STATUS = #{APPROVE_STATUS}
+		where 
+			APPROVAL_PK = #{APPROVAL_PK}
+	</update>
+	
+	<select id="individualStatusListCount" parameterType="hashMap" resultType="int">
+		select
+			count(*)
+		from 
+			MWT_APPROVAL
+		where
+			USER_NUM  = #{USER_NUM}
+
+	</select>
+	
+	<select id="approvalStatusCount" parameterType="hashMap" resultType="int">
+		select
+			count(*)
+		from 
+			MWT_APPROVAL
+		where
+			USER_NUM =  #{USER_NUM}
+		and 
+			REVIEW_STATUS IN ('검토 대기중', '검토 완료')
+		and
+			APPROVE_STATUS = '승인 대기중';
+
+
+	</select>
+	
+	<select id="individualStatusListGET" parameterType="hashMap" resultType="com.mini.demo.vo.ApprovalStatusVO">
+		select 
+			A.USER_NAME, A.USER_NUM, A.APPROVAL_PK, A.USER_GRADE, A.REVIEWER, A.APPROVER, A.APPROVE_REGDATE,
+			B.REVIEW_DATE, B.REVIEW_REFUSAL_DATE,
+			C.APPROVE_DATE, C.APPROVE_REFUSAL_DATE
+		from
+			MWT_APPROVAL as A 
+			right join MWT_REVIEWER as B on A.APPROVAL_PK = B.APPROVAL_PK 
+			right join MWT_APPROVER as C on A.APPROVAL_PK = C.APPROVAL_PK
+		where
+			A.USER_NUM = #{USER_NUM}
+				
+		order by A.APPROVE_REGDATE desc
+		limit #{sqlPostNum}, #{postNum}
+
+	</select>
+	
+	<select id="individualDetail" resultType="com.mini.demo.vo.ApprovalVO">
+		select
+			*
+		from 
+			MWT_APPROVAL
+		where
+			APPROVAL_PK  = #{APPROVAL_PK}
+
+	</select>
+	
+
+
+</mapper>
